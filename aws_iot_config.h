@@ -4,7 +4,7 @@
 
 // Copy and paste your configuration into this file
 //===============================================================
-#define AWS_IOT_MQTT_HOST "<HOST>" 	// your endpoint
+#define AWS_IOT_MQTT_HOST "A1N05T6VC14WL5.iot.us-west-2.amazonaws.com" 	// your endpoint
 #define AWS_IOT_MQTT_PORT 8883									// your port
 #define AWS_IOT_CLIENT_ID	"kegflow"						// your client ID
 #define AWS_IOT_MY_THING_NAME "BeerFlow"						// your thing name
