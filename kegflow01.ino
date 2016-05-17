@@ -16,12 +16,11 @@ volatile uint32_t lastflowratetimer = 0; // you can try to keep time of how long
 volatile float flowrate; // and use that to calculate a flow rate
 float lastMetric = 0; // the last reported metric (we'll only send metrics in the run loop if we get new data)
 float kegTotalLiters = 19.8; // the volume of the keg in liters
-float retrievedLiters;
 
 aws_iot_mqtt_client myClient; // init iot_mqtt_client
 int rc = -100; // return value placeholder
 char currentBeer_buf[21];
-char usage_buf[25];
+char usage_buf[20];
 char usage_buf2[6];
 char welcome_buf[13];
 String payload;
@@ -127,16 +126,14 @@ void loop() // run over and over again
 
   float usage = (atof(usage_buf2) + liters);
   
-  //Serial.print(liters); Serial.println(" Liters");
   lcd.setCursor(0, 3);
  
-  //File dataFile = FileSystem.open("/mnt/sd/datalog.txt", FILE_APPEND);
   if (liters > lastMetric) {
     lastMetric = liters;
     
     payload = "{\"state\":{\"reported\":";
     payload += "{\"liters\":";
-    payload += usage;
+    payload += liters;
     payload += "}}}";
     char JSON_buf[100];
     payload.toCharArray(JSON_buf, 100);
@@ -156,13 +153,12 @@ void loop() // run over and over again
     }
   } else {
   } 
-  retrievedLiters = 0.0f;
   delay(100);
 }
 
 void kegflow_callback(char* src, unsigned int len, Message_status_t flag) {
-    myClient.getDesiredValueByKey(src, "currentBeer", currentBeer_buf, 50);
-    myClient.getDesiredValueByKey(src, "welcomeMessage", welcome_buf, 50);
+    myClient.getDesiredValueByKey(src, "currentBeer", currentBeer_buf, 21);
+    myClient.getDesiredValueByKey(src, "welcomeMessage", welcome_buf, 13);
     myClient.getReportedValueByKey(src, "liters", usage_buf, 25);
     memmove(usage_buf2, usage_buf, 5);
 }
